@@ -10,6 +10,8 @@ import socket from 'socket.io';
 import util from 'util';
 import { exec } from 'child_process'
 
+import stream from 'stream'
+
 const execPromise = util.promisify(exec);
 
 const app = express();
@@ -64,7 +66,16 @@ app.delete('/deployment/fib-calculator', async (req, res) => {
   }
 })
 
-request('http://127.0.0.1:8001/api/v1/watch/namespaces/default/pods/').pipe(process.stdout)
+var writable = new stream.Writable({
+  write: function(chunk, encoding, next) {
+    console.log(chunk.toString());
+    next();
+  }
+});
+
+request('http://127.0.0.1:8001/api/v1/watch/namespaces/default/pods/').pipe(writable)
+
+tryConnectingToPodStatus
 
 io.on('connection', client => {
   client.on('event', data => { /* … */ });

@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 // Express route handlers
 
-app.get('/', (req, res) => {
+app.get('/ping', (req, res) => {
   res.send('Hello World');
 });
 

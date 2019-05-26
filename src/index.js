@@ -70,7 +70,7 @@ app.delete('/deployment/fib-calculator', async (req, res) => {
 
 var writable = new stream.Writable({
   write: function(chunk, encoding, next) {
-
+    console.log('on write')
     // const event = JSON.parse(chunk.toString())
 
     // console.log(JSON.parse(chunk))

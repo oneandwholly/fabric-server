@@ -21,7 +21,7 @@ app.get('/ping', (req, res) => {
 
 request('http://127.0.0.1:8001/api/v1/watch/namespaces/default/pods/').pipe(process.stdout)
 
-socket.on('connection', client => {
+io.on('connection', client => {
   client.on('event', data => { /* … */ });
   client.on('disconnect', () => { /* … */ });
 });

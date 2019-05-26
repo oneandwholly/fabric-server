@@ -70,10 +70,11 @@ app.delete('/deployment/fib-calculator', async (req, res) => {
 
 var writable = new stream.Writable({
   write: function(chunk, encoding, next) {
-    console.log(chunk);
 
-    const eventType = chunk.type
-    const podName = chunk.object.metadata.name
+    const event = JSON.parse(chunk.toString())
+
+    const eventType = event.type
+    const podName = event.object.metadata.name
 
     if (eventType === 'ADDED') {
       podStatusData[podName] = podName

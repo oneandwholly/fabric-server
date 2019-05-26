@@ -68,8 +68,6 @@ app.delete('/deployment/fib-calculator', async (req, res) => {
   }
 })
 
-app.get()
-
 const parser = JSONStream.parse();
 
 request('http://127.0.0.1:8001/api/v1/watch/namespaces/default/pods/').pipe(parser)

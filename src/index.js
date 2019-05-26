@@ -72,6 +72,18 @@ const parser = JSONStream.parse();
 
 request('http://127.0.0.1:8001/api/v1/watch/namespaces/default/pods/').pipe(parser)
 
+clients = []
+
+const addClient = (client) => {
+  clients.push(client)
+}
+
+io.on('connection', client => {
+  addClient(client)
+  client.on('event', data => { /* … */ });
+  client.on('disconnect', () => { /* … */ });
+});
+
 parser.on('data', (event) => {
     const eventType = event.type
     const podName = event.object.metadata.name
@@ -86,12 +98,10 @@ parser.on('data', (event) => {
       delete podStatusData[podName]
     }
     console.log({ podStatusData })
+    clients.forEach(client => {
+      client.send(event)
+    })
 })
-
-io.on('connection', client => {
-  client.on('event', data => { /* … */ });
-  client.on('disconnect', () => { /* … */ });
-});
 
 server.listen(5000, err => {
   console.log('Listening');

@@ -22,6 +22,8 @@ app.use(bodyParser.json());
 
 // Express route handlers
 
+const podStatusData = {}
+
 app.get('/ping', (req, res) => {
   res.send('Hello World');
 });
@@ -68,7 +70,20 @@ app.delete('/deployment/fib-calculator', async (req, res) => {
 
 var writable = new stream.Writable({
   write: function(chunk, encoding, next) {
-    console.log(chunk.toString());
+    // console.log(chunk.toString());
+
+    const eventType = chunk.type
+    const podName = chunk.object.metadata.name
+
+    if (eventType === 'ADDED') {
+      podStatusData[podName] = podName
+    }
+
+    if (eventType === 'DELETED') {
+      delete podStatusData[podName]
+    }
+
+    console.log({ podStatusData })
     next();
   }
 });

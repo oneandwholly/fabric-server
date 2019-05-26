@@ -8,9 +8,10 @@ import http from 'http';
 import socket from 'socket.io';
 
 import util from 'util';
-import { exec } from 'child_process'
+import { exec } from 'child_process';
 
-import stream from 'stream'
+import stream from 'stream';
+import JSONStream from 'JSONStream';
 
 const execPromise = util.promisify(exec);
 
@@ -68,48 +69,54 @@ app.delete('/deployment/fib-calculator', async (req, res) => {
   }
 })
 
-var writable = new stream.Writable({
-  write: function(chunk, encoding, next) {
-    console.log('on write', chunk.toString())
-    // const event = JSON.parse(chunk.toString())
+// var writable = new stream.Writable({
+//   write: function(chunk, encoding, next) {
+//     console.log('on write', chunk.toString())
+//     // const event = JSON.parse(chunk.toString())
 
-    // console.log(JSON.parse(chunk))
-    // const eventType = event.type
-    // const podName = event.object.metadata.name
+//     // console.log(JSON.parse(chunk))
+//     // const eventType = event.type
+//     // const podName = event.object.metadata.name
 
-    // if (eventType === 'ADDED') {
-    //   podStatusData[podName] = podName
-    // }
+//     // if (eventType === 'ADDED') {
+//     //   podStatusData[podName] = podName
+//     // }
 
-    // if (eventType === 'DELETED') {
-    //   delete podStatusData[podName]
-    // }
+//     // if (eventType === 'DELETED') {
+//     //   delete podStatusData[podName]
+//     // }
 
-    // console.log({ podStatusData })
-    next();
-  },
-  end: function(chunk, encoding, next) {
+//     // console.log({ podStatusData })
+//     next();
+//   },
+//   end: function(chunk, encoding, next) {
 
-    // const event = JSON.parse(chunk.toString())
-    console.log('on end')
-    console.log(chunk)
-    // const eventType = event.type
-    // const podName = event.object.metadata.name
+//     // const event = JSON.parse(chunk.toString())
+//     console.log('on end')
+//     console.log(chunk)
+//     // const eventType = event.type
+//     // const podName = event.object.metadata.name
 
-    // if (eventType === 'ADDED') {
-    //   podStatusData[podName] = podName
-    // }
+//     // if (eventType === 'ADDED') {
+//     //   podStatusData[podName] = podName
+//     // }
 
-    // if (eventType === 'DELETED') {
-    //   delete podStatusData[podName]
-    // }
+//     // if (eventType === 'DELETED') {
+//     //   delete podStatusData[podName]
+//     // }
 
-    // console.log({ podStatusData })
-    next();
-  }
-});
+//     // console.log({ podStatusData })
+//     next();
+//   }
+// });
 
-request('http://127.0.0.1:8001/api/v1/watch/namespaces/default/pods/').pipe(writable)
+const parser = JSONStream.parse();
+
+request('http://127.0.0.1:8001/api/v1/watch/namespaces/default/pods/').pipe(parser)
+
+parser.on('data', (obj) => {
+  console.log({ obj })
+})
 
 io.on('connection', client => {
   client.on('event', data => { /* … */ });

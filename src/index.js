@@ -73,8 +73,7 @@ var writable = new stream.Writable({
 
     // const event = JSON.parse(chunk.toString())
 
-    console.log(chunk.toString())
-
+    console.log(JSON.parse(chunk))
     // const eventType = event.type
     // const podName = event.object.metadata.name
 

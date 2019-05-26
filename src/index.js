@@ -68,6 +68,8 @@ app.delete('/deployment/fib-calculator', async (req, res) => {
   }
 })
 
+app.get()
+
 const parser = JSONStream.parse();
 
 request('http://127.0.0.1:8001/api/v1/watch/namespaces/default/pods/').pipe(parser)
@@ -77,13 +79,14 @@ parser.on('data', (event) => {
     const podName = event.object.metadata.name
 
     if (eventType === 'ADDED') {
-      podStatusData[podName] = podName
+      podStatusData[podName] = [event]
+    } else {
+      podStatusData[podName].push(event)
     }
 
     if (eventType === 'DELETED') {
       delete podStatusData[podName]
     }
-
     console.log({ podStatusData })
 })
 

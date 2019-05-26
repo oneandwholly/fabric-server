@@ -73,18 +73,20 @@ var writable = new stream.Writable({
 
     const event = JSON.parse(chunk.toString())
 
-    const eventType = event.type
-    const podName = event.object.metadata.name
+    console.log(event)
 
-    if (eventType === 'ADDED') {
-      podStatusData[podName] = podName
-    }
+    // const eventType = event.type
+    // const podName = event.object.metadata.name
 
-    if (eventType === 'DELETED') {
-      delete podStatusData[podName]
-    }
+    // if (eventType === 'ADDED') {
+    //   podStatusData[podName] = podName
+    // }
 
-    console.log({ podStatusData })
+    // if (eventType === 'DELETED') {
+    //   delete podStatusData[podName]
+    // }
+
+    // console.log({ podStatusData })
     next();
   }
 });

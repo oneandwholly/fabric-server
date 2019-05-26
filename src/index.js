@@ -71,9 +71,9 @@ app.delete('/deployment/fib-calculator', async (req, res) => {
 var writable = new stream.Writable({
   write: function(chunk, encoding, next) {
 
-    const event = JSON.parse(chunk.toString())
+    // const event = JSON.parse(chunk.toString())
 
-    console.log(event)
+    console.log(chunk.toString())
 
     // const eventType = event.type
     // const podName = event.object.metadata.name

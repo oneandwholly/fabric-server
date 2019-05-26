@@ -72,7 +72,7 @@ const parser = JSONStream.parse();
 
 request('http://127.0.0.1:8001/api/v1/watch/namespaces/default/pods/').pipe(parser)
 
-clients = []
+const clients = []
 
 const addClient = (client) => {
   clients.push(client)
@@ -99,7 +99,7 @@ parser.on('data', (event) => {
     }
     console.log({ podStatusData })
     clients.forEach(client => {
-      client.send(event)
+      client.send('pod-status-event', event)
     })
 })
 

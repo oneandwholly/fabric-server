@@ -103,7 +103,7 @@ parser.on('data', (event) => {
     }
     console.log({ podStatusData })
     clients.forEach(client => {
-      client.send('pod-status-event', event)
+      client.send({ type: 'pod-status-event', payload: event })
     })
 })
 

@@ -68,6 +68,10 @@ app.delete('/deployment/fib-calculator', async (req, res) => {
   }
 })
 
+app.get('/status/pods/current', (req, res) => {
+  return res.send({ status: 'OK', data: { podStatus: podStatusData } })
+})
+
 const parser = JSONStream.parse();
 
 request('http://127.0.0.1:8001/api/v1/watch/namespaces/default/pods/').pipe(parser)
